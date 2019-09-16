@@ -15,6 +15,11 @@ L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 // Define API query URL
 var url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 
+// Define a function that converts a timestamp in unix time to a human readable time stamp of datetime
+function date(date) {
+    date.toLocaleString();
+};
+
 // Grab data from API endpoint using d3
 d3.json(url, function(response) {
 
@@ -28,19 +33,21 @@ d3.json(url, function(response) {
     var location = response.features[i].geometry.coordinates;
 
     // Set the popup content properties to variables: magnitude and timestamp
-    var magnitude = response.features.properties.mag;
-    var time = response.features.properties.time;
+    var magnitude = response.features[i].properties.mag;
+    var timestamp = new Date(response.features[i].properties.time*1000);
 
     // Check for location property to see if data exists and therefore earthquake is 'plottable'
     if (location) {
 
       // Add a new marker to the cluster group and bind a pop-up
       markers.addLayer(L.marker([location[1], location[0]])
-        .bindPopup(response.features[i].descriptor));
-    }
+        .bindPopup("<h3>Magnitude: " + magnitude + "</h3><h5> Timestamp: " + date(timestamp) + "</h5>"));
 
-  }
+    };
+  };
 
+  // Add our marker cluster layer to the map
+  myMap.addLayer(markers);
 });
 
   
