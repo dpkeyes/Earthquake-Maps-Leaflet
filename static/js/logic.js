@@ -1,7 +1,7 @@
-// Creating map object to be centered at Berkeley, CA
+// Creating map object to be centered in middle of US
 var myMap = L.map("map", {
-    center: [37.8715, -122.273],
-    zoom: 5
+    center: [39.0119, -98.4842],
+    zoom: 4
   });
 
 // Adding tile layer to the map
@@ -17,37 +17,34 @@ var url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.ge
 
 // Define a function that converts a timestamp in unix time to a human readable time stamp of datetime
 function date(date) {
-    date.toLocaleString();
+    return date.toLocaleString();
 };
 
 // Grab data from API endpoint using d3
 d3.json(url, function(response) {
 
-  // Create a new marker cluster group
-  var markers = L.markerClusterGroup();
-
   // Loop through data
   for (var i = 0; i < response.features.length; i++) {
 
+    // Log the response
+    console.log(response);
+
     // Set the data location property to a variable
-    var location = response.features[i].geometry.coordinates;
+    var location = response.features[i].geometry;
 
     // Set the popup content properties to variables: magnitude and timestamp
     var magnitude = response.features[i].properties.mag;
-    var timestamp = new Date(response.features[i].properties.time*1000);
+    var timestamp = new Date(response.features[i].properties.time);
 
     // Check for location property to see if data exists and therefore earthquake is 'plottable'
     if (location) {
 
       // Add a new marker to the cluster group and bind a pop-up
-      markers.addLayer(L.marker([location[1], location[0]])
-        .bindPopup("<h3>Magnitude: " + magnitude + "</h3><h5> Timestamp: " + date(timestamp) + "</h5>"));
-
+      L.marker([location.coordinates[1], location.coordinates[0]])
+             .bindPopup("<h3>Magnitude: " + magnitude + "</h3><h5>Timestamp: " + date(timestamp) + "</h5>")
+             .addTo(myMap);
     };
   };
-
-  // Add our marker cluster layer to the map
-  myMap.addLayer(markers);
 });
 
   
