@@ -73,53 +73,52 @@ d3.json(url, function(response) {
     if (location) {
 
       // Add a new marker to the cluster group and bind a pop-up
-      L.circleMarker([location.coordinates[1], location.coordinates[0]], {
+      var circle = L.circleMarker([location.coordinates[1], location.coordinates[0]], {
         color: color,
         fillColor: color,
         fillOpacity: 0.8,
         radius: radius
-      }).bindPopup("<h3>Magnitude: " + magnitude + "</h3><h5>Timestamp: " + date(timestamp) + "</h5>")
-        .addTo(myMap);
+      }).bindPopup("<h3>Magnitude: " + magnitude + "</h3><h5>Timestamp: " + date(timestamp) + "</h5>");
+      
+      circle.addTo(myMap);
     };
   };
-
-  // Create legend mapping colors to earthquakes of different magnitudes
-  // --------------------------------------------------------------------
- 
-  // Create legend variable and place it in bottom right part of map
-  var legend = L.control({position: "bottomright"});
-
-  // Define function that adds legend to the html
-  legend.onAdd = function (map) {
-
-    // Define div to house the legend
-    var div = L.DomUtil.create("div", "legend");
-
-    // Define categories list of different magnitude buckets
-    var categories = ["0-1", "1-2", "2-3", "3-4", "4-5", "5+"];
-
-    // Define list with table title to house inner html of div
-    var html = ["<table style=background-color:gray><tr><th>Magnitude</tr></th>"];
-
-    // Push remaining html elements to html list using for loop
-    for (var i = 0; i < categories.length; i++) {
-        html.push(
-            "<tr><td>" + categories[i] + "</td><td><svg width='20' height='10'><rect x='0' y='0' width='20' height='10' fill='" + colors[i] + "'</></svg></td></tr>"
-        );
-    };
-
-    // Push final closing table tag
-    html.push("</table>")
-
-    // Join elements of html list together to form final html
-    div.innerHTML = html.join("");
-
-    return div;
-  };
-
-  // Call the legend.onAdd function with the input parameter myMap
-  legend.addTo(myMap);
 
 });
 
-  
+// Create legend mapping colors to earthquakes of different magnitudes
+// --------------------------------------------------------------------
+
+// Create legend variable and place it in bottom right part of map
+var legend = L.control({position: "bottomright"});
+
+// Define function that adds legend to the html
+legend.onAdd = function (map) {
+
+// Define div to house the legend
+var div = L.DomUtil.create("div", "legend");
+
+// Define categories list of different magnitude buckets
+var categories = ["0-1", "1-2", "2-3", "3-4", "4-5", "5+"];
+
+// Define list with table title to house inner html of div
+var html = ["<table style=background-color:gray><tr><th>Magnitude</tr></th>"];
+
+// Push remaining html elements to html list using for loop
+for (var i = 0; i < categories.length; i++) {
+    html.push(
+        "<tr><td>" + categories[i] + "</td><td><svg width='20' height='10'><rect x='0' y='0' width='20' height='10' fill='" + colors[i] + "'</></svg></td></tr>"
+    );
+};
+
+// Push final closing table tag
+html.push("</table>")
+
+// Join elements of html list together to form final html
+div.innerHTML = html.join("");
+
+return div;
+};
+
+// Call the legend.onAdd function with the input parameter myMap
+legend.addTo(myMap);
