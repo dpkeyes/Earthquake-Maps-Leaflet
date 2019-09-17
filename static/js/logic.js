@@ -37,25 +37,33 @@ d3.json(url, function(response) {
     var magnitude = response.features[i].properties.mag;
     var timestamp = new Date(response.features[i].properties.time);
 
-    // Set color variable based on magnitude
+    // Set color and radius variable based on magnitude
     var color = "";
+    var radius = "";
+
     if (magnitude < 1) {
       color = "#87EE77";
+      radius = 5;
     }
     else if (magnitude < 2) {
       color = "#B3EE77";
+      radius = 10;
     }
     else if (magnitude < 3) {
       color = "#D8EE77";
+      radius = 15;
     }
     else if (magnitude < 4) {
-        color = "#EECA77";
+      color = "#EECA77";
+      radius = 20;
     }
     else if (magnitude < 5) {
-        color = "#EEA477";
+      color = "#EEA477";
+      radius = 25;
     }
     else {
       color = "#EE8477";
+      radius = 30;
     };
 
     // Check for location property to see if data exists and therefore earthquake is 'plottable'
@@ -63,16 +71,12 @@ d3.json(url, function(response) {
 
       // Add a new marker to the cluster group and bind a pop-up
       var circle = L.circleMarker([location.coordinates[1], location.coordinates[0]], {
-        color: color
+        color: color,
+        radius: radius
       }).bindPopup("<h3>Magnitude: " + magnitude + "</h3><h5>Timestamp: " + date(timestamp) + "</h5>")
         .addTo(myMap);
     };
   };
-
-// // Write a on click method so that popup appears on top of other markers
-// circle.on("click", function() {
-//     layer.openPopup();
-// });
 
 });
 
