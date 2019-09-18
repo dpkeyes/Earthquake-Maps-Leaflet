@@ -9,6 +9,12 @@ html {
   height: 100%;
 }
 
-.leaflet-marker-icon:not(:hover) {
-  z-index: 0 !important;
+.leaflet-clickable {
+  position: relative;
+  z-index: -1 !important;
+}
+
+.leaflet-popup.leaflet-zoom-animated {
+  position: absolute;
+  z-index: 100 !important;
 }
